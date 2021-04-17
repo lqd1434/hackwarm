@@ -3,10 +3,9 @@
       <router-view></router-view>
       <div class="footer-tabbar" v-if="this.isShowFooterMenu">
         <van-tabbar route style="overflow: hidden">
-          <van-tabbar-item replace to="/home" icon="bi bi-house-door-fill" :id="'1'" @click="animate('1')">主页</van-tabbar-item>
-          <van-tabbar-item replace to="/treeHole" icon="bi bi-collection-fill" :id="'2'" @click="animate('2')">树洞</van-tabbar-item>
-          <van-tabbar-item replace to="/talkList" icon="bi bi-chat-dots-fill" :id="'3'" @click="animate('3')">消息</van-tabbar-item>
-          <van-tabbar-item replace to="/mine" icon="bi bi-person-circle" :id="'4'" @click="animate('4')">我的</van-tabbar-item>
+          <van-tabbar-item replace to="/home" icon="bi bi-house-door-fill" :id="'1'" @click="animate('1')">树洞</van-tabbar-item>
+          <van-tabbar-item replace to="/talkList" icon="bi bi-chat-dots-fill" :id="'2'" @click="animate('2')">消息</van-tabbar-item>
+          <van-tabbar-item replace to="/mine" icon="bi bi-person-circle" :id="'3'" @click="animate('3')">我的</van-tabbar-item>
         </van-tabbar>
       </div>
     </div>

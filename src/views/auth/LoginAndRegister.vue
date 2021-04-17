@@ -4,9 +4,16 @@
 <!--      登录窗口-->
       <div v-if="isShowLogin">
         <div class="login">
-          <div style="background-color: white;display: block;height: 5rem"></div>
-          <i class="bi bi-reply-fill p-1 ml-5" @click="back('toStartWin')"></i>
-          <h4 style="text-align: center" class="logo-text animate__animated animate__fadeInUp">欢迎来到U&nbsp;&nbsp;&nbsp;share</h4>
+          <i class="bi bi-reply-fill p-1 ml-4 mt-1" @click="back('toStartWin')"></i>
+            <van-image
+                class="bg-login animate__animated animate__fadeInUp"
+                width="20rem"
+                fit="cover"
+                src="/images/bg-login.png"
+            />
+          <div class="login-title">
+            <h4 style="text-align: center" class="logo-text animate__animated animate__fadeInUp">欢迎来到U&nbsp;&nbsp;&nbsp;tree</h4>
+          </div>
           <div class="input-group animate__animated animate__fadeInUp">
             <div class="input-group-prepend">
               <span class="input-group-text bi bi-phone" id="login-wrapping1"></span>
@@ -17,17 +24,17 @@
             <div class="input-group-prepend">
               <span class="input-group-text bi bi-shield-lock" id="login-wrapping2"></span>
             </div>
-            <input type="text" v-model.trim="password" class="form-control" placeholder="请输入登录密码" aria-describedby="login-wrapping2">
+            <input type="password" v-model.trim="password" class="form-control" placeholder="请输入登录密码" aria-describedby="login-wrapping2">
           </div>
         </div>
         <div class="another-op row no-gutters">
           <div class="col-2"></div>
-          <div class="register-en col-2 align-self-start pl-1" @click="enter('register')">注册账号</div>
-          <div class="col-4"></div>
-          <div class="getPawBack-en col-2 align-self-end pr-1" @click="enter('forgotPaw')">忘记密码</div>
+          <div class="register-en col-3 align-self-start pl-1" @click="enter('register')">注册账号</div>
+          <div class="col-3"></div>
+          <div class="getPawBack-en col-3 align-self-end pr-1" @click="enter('forgotPaw')">忘记密码</div>
           <div class="col-2"></div>
         </div>
-        <button type="button" class="btn btn-block btn-lg animate__animated animate__fadeInUp" @click="doLogin">登录</button>
+        <button type="button" class="btn btn-block login-btn btn-lg animate__animated animate__fadeInUp" @click="doLogin">登录</button>
         <div class="an-icon-group animate__animated animate__fadeInUp">
           <van-icon name="wechat" class="an-icon a1"/>
           <van-icon name="alipay" class="an-icon a2"/>
@@ -36,7 +43,7 @@
 <!--      找回密码-->
 <!--      -->
       <div v-if="isShowForgot">
-        <div style="background-color: white;display: block;height: 2rem"></div>
+        <h2 class="text-center mb-0 mt-2">找回密码</h2>
         <i class="bi bi-reply-fill p-1 ml-3" @click="back('toLogin')"></i>
         <div class="input-group animate__animated animate__fadeInUp forgot-view">
           <div class="input-group-prepend">
@@ -67,7 +74,7 @@
 <!--    注册窗口-->
     <div class="register" v-if="isShowRegister">
       <div>
-        <div style="background-color: white;display: block;height: 2rem"></div>
+        <h2 class="text-center mb-0 mt-2">注册账号</h2>
         <i class="bi bi-reply-fill p-1 ml-3" @click="back('toLogin')"></i>
         <div class="input-group animate__animated animate__fadeInUp forgot-view">
           <div class="input-group-prepend">
@@ -97,13 +104,13 @@
             <div class="input-group-prepend">
               <span class="input-group-text bi bi-shield-lock" id="ensure-wrapping1"></span>
             </div>
-            <input type="text" v-model.trim="password" class="form-control" placeholder="请输入登录密码" aria-describedby="ensure-wrapping1">
+            <input type="password" v-model.trim="password" class="form-control" placeholder="请输入登录密码" aria-describedby="ensure-wrapping1">
           </div>
           <div class="input-group animate__animated animate__fadeInUp">
             <div class="input-group-prepend">
               <span class="input-group-text bi bi-shield-lock-fill" id="ensure-wrapping2"></span>
             </div>
-            <input type="text" v-model.trim="ensurePassword" class="form-control" placeholder="请确认登录密码" aria-describedby="ensure-wrapping2">
+            <input type="password" v-model.trim="ensurePassword" @blur="ensure" class="form-control" placeholder="请确认登录密码" aria-describedby="ensure-wrapping2">
           </div>
         </div>
         <button type="button" class="btn btn-block btn-lg animate__animated animate__fadeInUp mt-2 text-white" @click="verify(isVerified)">{{ submitText }}</button>
@@ -112,26 +119,15 @@
 <!--    logo窗口-->
 <!--      -->
     <div v-if="isShowStartWin" class="start-win">
-      <van-image
-          width="10rem"
-          height="10rem"
-          fit="cover"
-          class="start-icon animate__animated animate__fadeInDown"
-          src="/images/start.png"
-      />
-      <van-image
-          width="3rem"
-          height="3rem"
-          fit="cover"
-          class="logo animate__animated animate__backInRight"
-          src="/images/logo.jpg"
-      />
       <i class="bi bi-arrow-right-circle-fill arrow animate__animated animate__fadeInLeft" @click="enter('login')"></i>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import {createNamespacedHelpers} from 'vuex'
+const { mapMutations,mapActions } = createNamespacedHelpers('warm')
 export default {
   name: "LoginAndRegister",
   data(){
@@ -163,6 +159,8 @@ export default {
     this.isShowStartWin = true
 },
   methods:{
+    ...mapMutations(['setUserInfo']),
+    ...mapActions(['getUserInfo']),
     enter(data){
       this.isShowStartWin = false
       this.isShowLogin = false
@@ -215,9 +213,39 @@ export default {
         })
       }
     },
+    ensure(){
+      if (this.ensurePassword!==this.password){
+        this.$toast({
+          message: '两次输入的密码不一致',
+          icon: 'cross',
+          type: 'fail',
+        })
+        this.ensurePassword = ''
+      }
+    },
     verify(data){
       if (data){
-        console.log('注册并登录')
+        const data1 = JSON.stringify({
+          telephone:this.telephone,
+          password:this.password
+        })
+        console.log(data1)
+        axios({
+          url:'/api/register',
+          method:'post',
+          data:data1
+        }).then((res)=>{
+          console.log(res.data)
+          if (res.data.code===0){
+            this.doLogin()
+          } else {
+            this.$toast({
+              type: 'fail',
+              message:'注册失败'
+            })
+          }
+          console.log(res)
+        })
       } else {
         if (this.verifiedCode === this.receiveVerifiedCode){
           this.isShowEnsure = true
@@ -241,8 +269,29 @@ export default {
           console.log('登录')
           console.log(this.telephone)
           console.log(this.password)
-          localStorage.setItem('isLogin','true')
-          this.$router.push('/')
+          const data1 = JSON.stringify({
+            password:this.password,
+            telephone:this.telephone,
+          })
+          console.log(data1)
+          axios({
+            url: '/api/login',
+            method: 'post',
+            data: data1
+          }).then((res)=>{
+            console.log(res.data)
+            if (res.data.code === 0){
+              localStorage.setItem('isLogin','true')
+              console.log(res.data.data.id)
+              this.$router.push('/')
+              this.getUserInfo(res.data.data.id)
+            } else {
+              this.$toast({
+                type: 'fail',
+                message:'登录失败'
+              })
+            }
+          })
         } else {
           this.$toast({
             type: 'fail',
@@ -268,16 +317,20 @@ export default {
   overflow: hidden;
 }
 .logo-text{
+  margin-top: -10rem;
+  margin-bottom: 7rem;
   color: black;
-  margin-top: 50px;
-  margin-bottom: 50px;
 }
 .bi{
   font-size: 22px;
 }
 .bi-reply-fill{
-  background-color: #F5F5F5;
-  border-radius: 50%;
+  position: absolute;
+  font-size: 22px;
+}
+.bg-login{
+  display: block;
+  margin: 3rem auto;
 }
 .input-group{
   margin: 1rem auto;
@@ -329,6 +382,9 @@ export default {
   border-radius: 25px;
   background-color: black;
 }
+.login-btn{
+  background-color: #FE6830;
+}
 .an-icon-group{
   text-align: center;
 }
@@ -348,23 +404,14 @@ export default {
   width: 100%;
   min-height: 800px;
   overflow: hidden;
-  background-color: black;
-}
-.start-icon{
-  display: block;
-  margin: 6rem 0 auto!important;
-  margin-left: 7.5rem!important;
-}
-.logo{
-  display: block;
-  margin-left: 11rem;
+  background:url("/images/start-bg.png");
 }
 .arrow{
   display: block;
-  margin-left: 11.2rem;
-  margin-top: 4rem;
+  margin-left: 49%;
+  margin-top: 140%;
   font-size: 2.5rem;
-  color: #E83434;
+  color: #1fc39e;
 }
 .forgot-view{
   margin-top: 3rem;

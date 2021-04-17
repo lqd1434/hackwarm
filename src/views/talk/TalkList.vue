@@ -28,6 +28,9 @@ export default {
 
     }
   },
+  mounted() {
+    this.changeIsShowFooterMenu(true)
+  },
   computed:{
     ...mapState(['messageList'])
   },
@@ -46,17 +49,18 @@ export default {
 
 <style scoped>
 .media{
-
+  border-bottom: #888888 1px solid;
 }
 .media-img{
   width: 4rem;
   border-radius: 50%;
 }
 .fromUser-name{
-  color: #6f42c1;
+  padding-top: 0.3rem;
+  color: black;
 }
 .message-content{
-  color: orangered;
+  color:#888888;
   font-size: 17px;
 }
 </style>

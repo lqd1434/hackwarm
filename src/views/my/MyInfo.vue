@@ -27,9 +27,9 @@
           <div class="col-2">88</div>
         </div>
         <div class="row no-gutters h-25 text-center">
-          <div class="col-2">总发布数</div>
-          <div class="col-2 text-primary">被回复数</div>
-          <div class="col-2 text-danger">心情指数</div>
+          <div class="col-2 text-info">发布</div>
+          <div class="col-2 text-primary">回复</div>
+          <div class="col-2 text-danger">心情</div>
         </div>
       </div>
     </div>
@@ -38,33 +38,27 @@
         <van-tabbar-item replace to="/update" icon="bi bi-eye-fill">浏览历史</van-tabbar-item>
         <van-tabbar-item replace to="/search" icon="bi bi-hourglass-split">审核进度</van-tabbar-item>
         <van-tabbar-item replace to="/search" icon="service">帮助反馈</van-tabbar-item>
-        <van-tabbar-item replace to="/search" icon="setting">设置中心</van-tabbar-item>
+        <van-tabbar-item replace to="/setting" icon="setting">设置中心</van-tabbar-item>
       </van-tabbar>
     </div>
     <div class="work-btn animate__animated animate__fadeInUp">
       <div class="btn">
         我的发布
       </div>
-      <div class="btn">
-        我喜欢的
-      </div>
     </div>
     <div class="container work-content animate__animated animate__fadeInUp a1">
-      <div class="row gutter">
+      <div class="row">
         <div class="col-6">
           <div v-for="n in 10" :key="n">
             <div class="work-item">
               <van-image
                   radius="1.3rem"
-                  width="10rem"
-                  height="10rem"
                   fit="cover"
                   src="/images/moon1.jpeg"
               />
               <div>
                 <h6>标题</h6>
                 <div class="work-text">content</div>
-                <div class="work-like"><i class="bi bi-emoji-smile-fill" :id="'l'+n" @click="Like('l',n)"></i><span>1988</span></div>
               </div>
             </div>
           </div>
@@ -74,15 +68,12 @@
             <div class="work-item">
               <van-image
                   radius="1.3rem"
-                  width="10rem"
-                  height="10rem"
                   fit="cover"
                   src="/images/start.png"
               />
               <div>
                 <h6>标题</h6>
-                <div class="work-text">contentcontentcontentontentcont</div>
-                <div class="work-like"><i class="bi bi-emoji-smile-fill" :id="'r'+n" @click="Like('r',n)"></i><span>1988</span></div>
+                <div class="work-text">content</div>
               </div>
             </div>
           </div>
@@ -94,8 +85,7 @@
 
 <script>
 import {createNamespacedHelpers} from 'vuex'
-
-const { mapState } = createNamespacedHelpers('warm')
+const { mapState,mapMutations } = createNamespacedHelpers('warm')
 export default {
   name: "MyInfo",
   data () {
@@ -107,22 +97,11 @@ export default {
     ...mapState(['user'])
   },
   mounted() {
+    this.changeIsShowFooterMenu(true)
     this.userIcon ='/images/' +this.user.icon
   },
   methods:{
-    Like(a,data){
-      const element = document.getElementById(a+data)
-      // element.style.transition = 'font-size 100ms linear'
-      // element.style.fontSize = '16px'
-      // setTimeout(()=>{
-      //   element.style.fontSize = '14px'
-      // },100)
-      if (element.style.color===''||element.style.color==='rgb(136, 136, 136)'){
-        element.style.color = 'rgb(235, 141, 0)'
-      } else if (element.style.color==='rgb(235, 141, 0)'){
-        element.style.color = 'rgb(136, 136, 136)'
-      }
-    }
+    ...mapMutations(['changeIsShowFooterMenu']),
   }
 }
 </script>

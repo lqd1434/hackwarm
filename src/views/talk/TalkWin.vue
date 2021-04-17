@@ -3,7 +3,7 @@
     <div class="talkWin-header" style="font-size: 20px">
       <div class="mt-4"></div>
       <div class="border-bottom">
-        <i class="bi bi-arrow-left-circle ml-3 mr-3" @click="back"></i>
+        <i class="bi bi-arrow-left-circle-fill ml-3 mr-3" @click="back"></i>
         <span>匿名用户</span>
       </div>
     </div>
@@ -13,7 +13,7 @@
         <div class="card" v-if="item.fromUserId===talkToWho">
           <div class="card-body">
             <div class="message">
-              <img src="/images/niming1.png" class="message-icon"/>
+              <img src="/images/left-nm.jpeg" class="message-icon"/>
               <div class="text">
                 <div class="message-content">{{ item.content }}</div>
                 <p class="send-time">{{ item.sendTime }}</p>
@@ -25,7 +25,7 @@
         <div class="card" v-if="item.fromUserId===user.id">
           <div class="card-body">
             <div class="message-right float-right">
-              <img src="/images/niming2.png" class="message-icon-right"/>
+              <img src="/images/right-nm.jpg" class="message-icon-right"/>
               <div class="text-right">
                 <div class="message-content-right">{{ item.content }}</div>
                 <p class="send-time-right">{{ item.sendTime }}</p>
@@ -40,7 +40,7 @@
         <input type="text" class="footer-input" placeholder="请输入聊天内容"/>
         <div>
           <i class="bi bi-emoji-smile"></i>
-          <button class="send-btn btn">发送</button>
+          <button class="send-btn btn btn-dark">发送</button>
         </div>
       </div>
     </div>
@@ -87,8 +87,6 @@ export default {
 .send-btn{
   margin-top: -1rem;
   margin-left: 0.5rem;
-  color: white;
-  background-color: black;
 }
 .bi-emoji-smile{
   padding-left: 0.6rem;
@@ -116,7 +114,7 @@ export default {
 .message .text {
   min-width:200px;
   min-height: 30px;
-  background-color: rgba(245,245,245,1);
+  background-color: rgba(183,183,190,1);
   text-align: left;
   border-radius: 6px;
   padding: 5px 0;
@@ -159,12 +157,12 @@ p{
 }
 .send-time{
   padding-left: 12px;
-  color: #1fc39e;
+  color: #1D84FF;
   font-size: 12px;
 }
 .send-time-right{
   padding-right: 12px;
-  color: #C9F0EE;
+  color: #1fc39e;
   font-size: 12px;
 }
 .message .text::after {
@@ -175,7 +173,7 @@ p{
   margin-top: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent rgba(245,245,245,1) transparent transparent;
+  border-color: transparent rgba(183,183,190,1) transparent transparent;
 }
 .message-right .text-right::after {
   content: "";
@@ -190,8 +188,11 @@ p{
 .chat-window{
   margin-bottom: 120px;
 }
-.bi-arrow-left-circle{
-  font-size: 23px;
+.bi-arrow-left-circle-fill{
+  font-size: 25px;
   font-weight: 800;
+}
+img{
+  border: black 1px solid;
 }
 </style>

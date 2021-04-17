@@ -3,11 +3,16 @@ import VueRouter from 'vue-router'
 import Main from "@/components/Main";
 import Home from "@/views/Home/Home";
 import MyInfo from "@/views/my/MyInfo";
-import TreeHole from "@/views/treehole/TreeHole";
-import UpdateInfo from "@/views/my/UpdateInfo";
+import UpdateInfo from "@/views/my/setting/UpdateInfo";
 import LoginAndRegister from "@/views/auth/LoginAndRegister";
 import TalkList from "@/views/talk/TalkList";
 import TalkWin from "@/views/talk/TalkWin";
+import Account from "@/views/my/setting/Account";
+import Setting from "@/views/my/setting/Setting";
+import UpdateSer from "@/views/my/setting/UpdateSer";
+import Icon from "@/views/my/setting/Icon";
+import ViewPost from "@/views/Home/ViewPost";
+import AuditPost from "@/views/my/setting/AuditPost";
 
 Vue.use(VueRouter)
 
@@ -23,19 +28,19 @@ const routes = [
 				component: Home
 			},
 			{
-				path: '/treeHole',
-				name: 'treeHole',
-				component: TreeHole
+				path: '/view',
+				name: 'view',
+				component: ViewPost
 			},
+			// {
+			// 	path: '/treeHole',
+			// 	name: 'treeHole',
+			// 	component: TreeHole
+			// },
 			{
 				path: '/mine',
 				name: 'mine',
 				component: MyInfo
-			},
-			{
-				path: '/update',
-				name: 'update',
-				component: UpdateInfo
 			},
 			{
 				path: '/talkList',
@@ -47,7 +52,36 @@ const routes = [
 				name: 'talkWin',
 				component: TalkWin
 			},
-
+			{
+				path: '/setting',
+				name: 'setting',
+				component: Setting
+			},
+			{
+				path: '/audit',
+				name: 'audit',
+				component: AuditPost
+			},
+			{
+				path: '/account',
+				name: 'account',
+				component: Account
+			},
+			{
+				path: '/updateInfo',
+				name: 'updateInfo',
+				component: UpdateInfo
+			},
+			{
+				path: '/updateSer',
+				name: 'updateSer',
+				component: UpdateSer
+			},
+			{
+				path: '/icon',
+				name: 'icon',
+				component: Icon
+			}
 		]
 	},
 	{

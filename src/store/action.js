@@ -10,6 +10,20 @@ const action = {
 			commit('test', res.data)
 			console.log(res.data)
 		})
+	},
+	getUserInfo({commit},data){
+		return new Promise((resolve) => {
+			axios({
+				url: '/api/info/'+data,
+				method: 'get'
+			}).then((res)=>{
+				resolve(res.data)
+				commit('setUserInfo', res.data.data)
+				console.log(res.data)
+			})
+
+		})
+
 	}
 }
 

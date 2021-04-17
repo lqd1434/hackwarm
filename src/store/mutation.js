@@ -2,6 +2,10 @@ const mutation = {
 	test(state,data){
 		console.log(state.word,data)
 	},
+	setUserInfo(state,data){
+		state.user = data
+		console.log(state.user)
+	},
 	setTalkToWho(state,data){
 		state.talkToWho = data
 	},
@@ -13,6 +17,9 @@ const mutation = {
 	},
 	addMessageHistory(state,data){
 		state.messageHistory.push(data)
+	},
+	setViewContentText(state,data){
+		state.viewContentText = data
 	}
 }
 
