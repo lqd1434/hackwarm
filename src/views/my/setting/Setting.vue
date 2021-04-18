@@ -1,14 +1,5 @@
 <template>
-  <div>
-    <div id="back-nar">
-      <van-nav-bar
-          title="设置中心"
-          left-text="返回"
-          left-arrow
-          @click-left="onClickLeft"
-      />
-    </div>
-
+  <div class="overflow-auto">
     <div class="animate__animated animate__fadeInUp">
       <van-cell is-link to="/account" class="cell-title">
         <template #title>
@@ -40,14 +31,14 @@
           <span class="cell-title">隐私政策</span>
         </template>
       </van-cell>
-      <van-cell is-link to="/audit" class="cell-title">
+      <van-cell is-link to="/audit" class="cell-title" v-if="this.user.role===1">
         <template #title>
           <i class="bi bi-cone-striped cell-title"></i>
           <span class="cell-title">帖子审核</span>
         </template>
       </van-cell>
     </div>
-    <button type="button" class="btn fixed-bottom btn-block bg-dark btn-lg animate__animated animate__fadeInUp text-white logout-btn" @click="doLogout">退出登录</button>
+    <button type="button" class="btn  btn-block bg-dark btn-lg animate__animated animate__fadeInUp text-white logout-btn" @click="doLogout">退出登录</button>
   </div>
 </template>
 
@@ -61,15 +52,17 @@ export default {
     ...mapState(['user'])
   },
   mounted () {
-    this.changeIsShowFooterMenu(false)
+    console.log(this.user.role)
   },
   methods: {
-    ...mapMutations(['changeIsShowFooterMenu']),
+    ...mapMutations(['changeIsShowFooterMenu','closeSocket']),
     onClickLeft(){
       this.$router.push('/mine')
     },
     doLogout(){
-      localStorage.setItem('isLogin','false')
+      localStorage.removeItem('isLogin')
+      localStorage.removeItem('myToken')
+      this.closeSocket()
       this.$router.push('/login')
     }
   }
@@ -85,7 +78,7 @@ export default {
   padding-right: 0.8rem;
 }
 .logout-btn{
-  margin:0 auto 5rem auto;
+  margin:5rem auto 5rem auto;
   border-radius: 1.5rem;
   width:80%
 }
@@ -94,5 +87,9 @@ export default {
 #back-nar .van-nav-bar__text,.van-nav-bar__title,.van-icon-arrow-left::before{
   font-size: 18px;
   color:black!important;
+}
+.van-cell{
+  background: none!important;
+  border: none!important;
 }
 </style>

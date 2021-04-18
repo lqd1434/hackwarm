@@ -10,9 +10,9 @@ import TalkWin from "@/views/talk/TalkWin";
 import Account from "@/views/my/setting/Account";
 import Setting from "@/views/my/setting/Setting";
 import UpdateSer from "@/views/my/setting/UpdateSer";
-import Icon from "@/views/my/setting/Icon";
 import ViewPost from "@/views/Home/ViewPost";
 import AuditPost from "@/views/my/setting/AuditPost";
+import MyPosts from "@/views/my/MyPosts";
 
 Vue.use(VueRouter)
 
@@ -32,11 +32,6 @@ const routes = [
 				name: 'view',
 				component: ViewPost
 			},
-			// {
-			// 	path: '/treeHole',
-			// 	name: 'treeHole',
-			// 	component: TreeHole
-			// },
 			{
 				path: '/mine',
 				name: 'mine',
@@ -63,6 +58,11 @@ const routes = [
 				component: AuditPost
 			},
 			{
+				path: '/myPosts',
+				name: 'myPosts',
+				component: MyPosts
+			},
+			{
 				path: '/account',
 				name: 'account',
 				component: Account
@@ -77,11 +77,6 @@ const routes = [
 				name: 'updateSer',
 				component: UpdateSer
 			},
-			{
-				path: '/icon',
-				name: 'icon',
-				component: Icon
-			}
 		]
 	},
 	{

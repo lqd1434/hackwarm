@@ -12,6 +12,14 @@ module.exports = {
         pathRewrite: {
           '^/': '/'
         }
+      },
+      '/chat': {
+        target: 'http://182.254.159.37:8081',
+        ws: true,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/': '/'
+        }
       }
     }
   }

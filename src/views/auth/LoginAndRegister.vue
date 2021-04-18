@@ -82,7 +82,7 @@
           </div>
           <input type="text" v-model.trim="telephone" ref="input" class="form-control" placeholder="请输入手机号码" aria-describedby="register-wrapping1">
         </div>
-        <div class="input-group animate__animated animate__fadeInUp">
+        <div class="input-group form-group animate__animated animate__fadeInUp">
           <input type="text" v-model="verifiedCode" class="form-control forgot-ver"  placeholder="请输入验证码" aria-describedby="register-addon">
           <div class="input-group-append">
             <div class="input-group-text" id="register-addon">
@@ -98,7 +98,8 @@
             </div>
           </div>
         </div>
-<!--        确认密码-->
+        <small id="emailHelp" class="form-text text-muted">短信服务暂未申请成功,默认验证码123456</small>
+        <!--        确认密码-->
         <div v-if="isShowEnsure">
           <div class="input-group animate__animated animate__fadeInUp">
             <div class="input-group-prepend">
@@ -235,13 +236,12 @@ export default {
           method:'post',
           data:data1
         }).then((res)=>{
-          console.log(res.data)
           if (res.data.code===0){
             this.doLogin()
           } else {
             this.$toast({
               type: 'fail',
-              message:'注册失败'
+              message:res.data.msg
             })
           }
           console.log(res)
@@ -266,29 +266,25 @@ export default {
     doLogin(){
       if (this.telephone){
         if (this.telephone.length === 11){
-          console.log('登录')
-          console.log(this.telephone)
-          console.log(this.password)
           const data1 = JSON.stringify({
             password:this.password,
             telephone:this.telephone,
           })
-          console.log(data1)
           axios({
             url: '/api/login',
             method: 'post',
             data: data1
           }).then((res)=>{
-            console.log(res.data)
             if (res.data.code === 0){
               localStorage.setItem('isLogin','true')
-              console.log(res.data.data.id)
-              this.$router.push('/')
-              this.getUserInfo(res.data.data.id)
+              localStorage.setItem('myToken',res.data.data.token)
+              this.getUserInfo(res.data.data.id).then(()=>{
+                this.$router.push('/')
+              })
             } else {
               this.$toast({
                 type: 'fail',
-                message:'登录失败'
+                message:res.data.msg
               })
             }
           })
@@ -354,6 +350,9 @@ export default {
   color: white;
   font-size: 0.8rem;
 }
+.text-muted{
+  padding-left: 20%;
+}
 .form-control{
   border: 0!important;
   border-left: #D1D1D1 1px solid !important;;
@@ -407,9 +406,14 @@ export default {
   background:url("/images/start-bg.png");
 }
 .arrow{
-  display: block;
-  margin-left: 49%;
-  margin-top: 140%;
+  /*display: block;*/
+  position: absolute;
+  float: bottom;
+  bottom: 0;
+  padding-left: 43%;
+  padding-bottom: 20%;
+  /*padding-left: 49%;*/
+  /*padding-top: 140%;*/
   font-size: 2.5rem;
   color: #1fc39e;
 }

@@ -37,11 +37,11 @@
         <form>
           <div class="form-group mt-5 form-p">
             <label for="password1">旧密码</label>
-            <input type="password" class="form-control" id="password1" aria-describedby="emailHelp">
+            <input type="password" v-model="oldPassword" class="form-control" id="password1" aria-describedby="emailHelp">
           </div>
           <div class="form-group form-p">
             <label for="exampleInputPassword1">新密码</label>
-            <input type="password" class="form-control" id="exampleInputPassword1">
+            <input type="password" v-model="newPassword" class="form-control" id="exampleInputPassword1">
           </div>
           <button type="button" class="btn btn-dark btn-block  mt-4 form-p" @click="submit">提交</button>
         </form>
@@ -51,11 +51,15 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "UpdateSer",
   data(){
     return{
-      isShowPopup: false
+      isShowPopup: false,
+      oldPassword:'',
+      newPassword:'',
     }
   },
   methods:{
@@ -68,8 +72,35 @@ export default {
       }
     },
     submit(){
-      console.log('submit')
-    }
+      const data1 = JSON.stringify({
+        new_password:this.newPassword,
+        password:this.oldPassword,
+      })
+      axios({
+        url:'/api/auth/pwd',
+        method: 'put',
+        headers:{
+          Authorization:'Bearer ' + localStorage.getItem('myToken')
+        },
+        data:data1
+      }).then((res)=> {
+        if (res.data.code===0){
+          this.$toast({
+            type: 'success',
+            message:'修改密码成功'
+          })
+          this.isShowPopup = false
+        } else {
+          this.$toast({
+            type: 'fail',
+            message:'修改失败,请重新输入'
+          })
+        }
+        console.log(res.data)
+      })
+      this.newPassword = ''
+      this.oldPassword = ''
+      }
   }
 }
 </script>

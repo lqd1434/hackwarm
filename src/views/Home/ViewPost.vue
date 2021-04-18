@@ -7,7 +7,7 @@
         <span>返回</span>
       </div>
       <div class="bd-content">
-        <h3>{{ this.viewContentText }}</h3>
+        <h3>{{ this.content }}</h3>
       </div>
     </div>
     <div>
@@ -25,10 +25,10 @@
         >
           <div class="dialog-content mt-4">
             <div>
-              <h3 style="text-align: center;color: coral">ggggg</h3>
+              <h3 style="text-align: center;color: coral">{{ postEntity.Title }}</h3>
             </div>
             <div class="mt-3 pl-1">
-              <p style="font-size: 18px">llllll</p>
+              <p style="font-size: 18px">{{ postEntity.Content }}</p>
             </div>
           </div>
         </van-dialog>
@@ -39,6 +39,7 @@
 
 <script>
 import {createNamespacedHelpers} from 'vuex'
+import axios from "axios";
 const { mapMutations,mapState } = createNamespacedHelpers('warm')
 
 export default {
@@ -47,18 +48,35 @@ export default {
     return{
       isShowBg:false,
       postTitle: '',
+      content:'',
+      postEntity:{}
     }
   },
   computed:{
-    ...mapState(['viewContentText'])
+    ...mapState(['viewContentId'])
   },
   mounted() {
+    this.setViewContent(this.viewContentId)
     this.changeIsShowFooterMenu(false)
   },
   methods:{
-    ...mapMutations(['changeIsShowFooterMenu']),
+    ...mapMutations(['changeIsShowFooterMenu','setTalkToWho']),
+    getPost(id){
+      return new Promise((resolve)=>{
+        axios({
+          url: '/api/post/'+id,
+          method:'get'
+        }).then((res)=>{
+          console.log(res)
+          resolve(res.data)
+        })
+      })
+
+    },
     talkWith(){
       this.isShowBg = false
+      this.setTalkToWho(this.postEntity.UserId)
+      this.$router.push('/talkWin')
     },
     cancel(){
       this.isShowBg = false
@@ -68,6 +86,21 @@ export default {
     },
     ShowView(){
       this.isShowBg = true
+      this.getPost(this.viewContentId).then((res)=>{
+        if (res.code === 0){
+          this.postEntity = res.data.post
+        }
+        console.log(res)
+      })
+    },
+    setViewContent(data){
+      if(data===2){
+        this.content = '轻点遇见快乐'
+      } else if(data===3){
+        this.content = '轻点倾听烦恼'
+      }else if(data===1){
+        this.content = '轻点同祝校庆'
+      }
     }
   }
 

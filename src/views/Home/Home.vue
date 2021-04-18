@@ -1,24 +1,24 @@
 <template>
   <div id="root">
-    <div v-if="!isShowBg">
+    <div v-if="!isShowBg" class="animate__animated animate__fadeInDown">
       <div class="w-100">
         <div class="btn-group-vertical w-auto ml-auto mr-auto" v-if="isShowBtn1">
-          <div class="btn" @click="Post('1')">分享</div>
-          <div class="btn" @click="toSee('1')">遇见</div>
+          <div class="btn text-white" @click="Post('1')">分享</div>
+          <div class="btn text-white" @click="toSee('1')">遇见</div>
         </div>
         <img @click="showChoice('happy')" ref="img1" src="/images/treeHole-1.png" class="tree-hole mt-4 animate__animated animate__fadeInDown shine1">
       </div>
       <div>
         <div class="btn-group-vertical" v-if="isShowBtn2">
-          <div class="btn" @click="Post('2')">倾诉</div>
-          <div class="btn" @click="toSee('2')">聆听</div>
+          <div class="btn text-white" @click="Post('2')">倾诉</div>
+          <div class="btn text-white" @click="toSee('2')">聆听</div>
         </div>
         <img @click="showChoice('annoy')" ref="img2" src="/images/treeHole-2.png" class="tree-hole animate__animated animate__fadeInDown shine2">
       </div>
       <div>
         <div class="btn-group-vertical" v-if="isShowBtn3">
-          <div class="btn" @click="Post('3')">祝福</div>
-          <div class="btn" @click="toSee('3')">感受</div>
+          <div class="btn text-white" @click="Post('3')">祝福</div>
+          <div class="btn text-white" @click="toSee('3')">感受</div>
         </div>
         <img @click="showChoice('school')" ref="img3" src="/images/treeHole-3.png" class="tree-hole animate__animated animate__fadeInDown shine1">
       </div>
@@ -39,13 +39,13 @@
           <div class="dialog-content mt-4">
             <div>
               <span class="pr-2">标题</span>
-              <input class="form-control"/>
+              <input class="form-control" v-model="postTitle1" type="text"/>
             </div>
             <div class="mt-3">
               <span class="c1-label pr-2">内容</span>
             </div>
             <div class="pl-5">
-              <textarea class="form-control t1"></textarea>
+              <textarea class="form-control t1" v-model="postContent"></textarea>
             </div>
           </div>
         </van-dialog>
@@ -56,7 +56,8 @@
 
 <script>
 import {createNamespacedHelpers} from 'vuex'
-const { mapMutations } = createNamespacedHelpers('warm')
+import axios from "axios";
+const { mapMutations,mapActions } = createNamespacedHelpers('warm')
 
 export default {
   name: "Home",
@@ -66,6 +67,10 @@ export default {
       isShowDialog: false,
       isShowBg: false,
       postTitle: '',
+
+      postTitle1:'',
+      postContent: '',
+      type:'',
 
       isShowBtn1: false,
       isShowBtn2: false,
@@ -105,7 +110,8 @@ export default {
     this.changeIsShowFooterMenu(true)
   },
   methods:{
-    ...mapMutations(['changeIsShowFooterMenu','setViewContentText']),
+    ...mapMutations(['changeIsShowFooterMenu','setViewContentId']),
+    ...mapActions(['sendPostAction']),
     showChoice(data){
       if(data === 'happy') {
         this.isShowBtn1 = !this.isShowBtn1
@@ -129,15 +135,44 @@ export default {
       this.changeIsShowFooterMenu(false)
       if (data === '1'){
         this.postTitle = '探索快乐'
+        this.type = 2
       } else if (data === '2'){
         this.postTitle = '宣泄烦恼'
+        this.type = 3
       } else if (data === '3'){
         this.postTitle = '校庆祝福'
+        this.type = 1
       }
     },
     sendPost(){
       this.isShowBg = false
       this.changeIsShowFooterMenu(true)
+      const data1 = JSON.stringify({
+        tag_id:this.type,
+        title: this.postTitle1,
+        content: this.postContent
+      })
+      axios({
+        url: '/api/auth/post',
+        method: 'post',
+        headers:{
+          Authorization:'Bearer ' + localStorage.getItem('myToken')
+        },
+        data:data1
+      }).then((res)=>{
+        if (res.data.code === 0){
+          this.$toast({
+            type: 'success',
+            message:'发送成功,请等待审核'
+          })
+        } else {
+          this.$toast({
+            type: 'fail',
+            message:'发送失败'
+          })
+        }
+        console.log(res.data)
+      })
       this.notShow()
       console.log('---')
     },
@@ -150,13 +185,13 @@ export default {
     toSee(data){
       let content = null
       if(data==='1'){
-        content = '轻点遇见快乐'
+        content = 2
       } else if(data==='2'){
-        content = '轻点倾听烦恼'
+        content = 3
       }else if(data==='3'){
-        content = '轻点同祝校庆'
+        content = 1
       }
-      this.setViewContentText(content)
+      this.setViewContentId(content)
       this.$router.push('/view',)
     },
     showTalkWin(data){

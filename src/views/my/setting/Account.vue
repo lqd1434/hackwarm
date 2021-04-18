@@ -38,7 +38,7 @@ export default {
   },
   methods:{
     onClickLeft(){
-      this.$router.push('/setting')
+      this.$router.push('/mine')
     }
   }
 }

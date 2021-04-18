@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div id="root">
     <div class="user animate__animated animate__fadeInDown">
       <div class="card user-info">
         <div class="row no-gutters">
           <div class="col-9">
             <div class="card-body">
-              <h3 class="card-title username">{{ user.username }}</h3>
-              <p class="card-text user-sign">{{user.mySign}}</p>
+              <h3 class="card-title username">{{ user.name }}</h3>
+              <p class="card-text user-sign">{{user.description}}</p>
             </div>
           </div>
           <div class="col-2">
@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="row no-gutters h-auto text-center">
-          <div class="col-2">120</div>
+          <div class="col-2">{{ myPosts.length }}</div>
           <div class="col-2">55</div>
           <div class="col-2">88</div>
         </div>
@@ -36,79 +36,86 @@
     <div class="animate__animated animate__fadeInUp">
       <van-tabbar route :fixed="false" class="op-icon">
         <van-tabbar-item replace to="/update" icon="bi bi-eye-fill">浏览历史</van-tabbar-item>
-        <van-tabbar-item replace to="/search" icon="bi bi-hourglass-split">审核进度</van-tabbar-item>
+        <van-tabbar-item replace to="/myPosts" icon="bi bi-hourglass-split">审核进度</van-tabbar-item>
         <van-tabbar-item replace to="/search" icon="service">帮助反馈</van-tabbar-item>
-        <van-tabbar-item replace to="/setting" icon="setting">设置中心</van-tabbar-item>
       </van-tabbar>
     </div>
-    <div class="work-btn animate__animated animate__fadeInUp">
-      <div class="btn">
-        我的发布
-      </div>
-    </div>
-    <div class="container work-content animate__animated animate__fadeInUp a1">
-      <div class="row">
-        <div class="col-6">
-          <div v-for="n in 10" :key="n">
-            <div class="work-item">
-              <van-image
-                  radius="1.3rem"
-                  fit="cover"
-                  src="/images/moon1.jpeg"
-              />
-              <div>
-                <h6>标题</h6>
-                <div class="work-text">content</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-6">
-          <div v-for="n in 10" :key="n">
-            <div class="work-item">
-              <van-image
-                  radius="1.3rem"
-                  fit="cover"
-                  src="/images/start.png"
-              />
-              <div>
-                <h6>标题</h6>
-                <div class="work-text">content</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div>
+      <Setting></Setting>
     </div>
   </div>
 </template>
 
 <script>
 import {createNamespacedHelpers} from 'vuex'
+import Setting from "@/views/my/setting/Setting";
+import axios from "axios";
 const { mapState,mapMutations } = createNamespacedHelpers('warm')
 export default {
   name: "MyInfo",
+  components:{
+    Setting
+  },
   data () {
     return{
       userIcon: ''
     }
   },
   computed:{
-    ...mapState(['user'])
+    ...mapState(['user','myPosts'])
+  },
+  created() {
+    this.getAllPost().then((res)=>{
+      this.setMyPosts(res.data.posts)
+    })
   },
   mounted() {
     this.changeIsShowFooterMenu(true)
     this.userIcon ='/images/' +this.user.icon
   },
   methods:{
-    ...mapMutations(['changeIsShowFooterMenu']),
+    ...mapMutations(['changeIsShowFooterMenu','setMyPosts']),
+    getAllPost(){
+      return new Promise(((resolve) => {
+        axios({
+          url:'/api/auth/myposts',
+          method:'get',
+          headers:{
+            Authorization:'Bearer ' + localStorage.getItem('myToken')
+          }
+        }).then((res)=>{
+          if (res.data.code === 0){
+            resolve(res.data)
+          } else {
+            this.$toast({
+              type: 'fail',
+              message:res.data.msg
+            })
+          }
+        })
+      }))
+    },
+    getImages(type){
+      let result = ''
+      if (type === 1){
+        result='schoolTree.png'
+      } else if (type === 2){
+        result='happyTree.png'
+      } else {
+        result='annoyTree.png'
+      }
+      return result
+    }
   }
 }
 </script>
 
 <style scoped>
-.user{
-
+#root{
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: url("/images/img_2.png");
 }
 .user-info{
   margin-bottom: 30px;
